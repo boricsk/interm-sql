@@ -93,3 +93,31 @@ OUTER APPLY (
     WHERE o.CustomerID = c.CustomerID
     ORDER by OrderDate desc
 ) as lastbuy
+
+/*
+3
+*/
+
+--A litát fel kell bontani SQL-ben használható listára. Van beépített fgv.
+--"Keil,Gage,Almand,Emauel,Gates,Koch,Bourne,Colvin,Chambers,Ruth,Benson,Ray,West"
+
+select 'Keil,Gage,Almand,Emauel,Gates,Koch,Bourne,Colvin,Chambers,Ruth,Benson,Ray,West'
+
+select * from string_split('Keil,Gage,Almand,Emauel,Gates,Koch,Bourne,Colvin,Chambers,Ruth,Benson,Ray,West',',')
+--ez mindíg value névvel tér vissza, speciális mert from után kell tenni, mert úgy viselkedik mint egy tábla
+
+select *
+from string_split('Keil,Gage,Amland,Emanuel,Gates,Koch,Bourne,Colvin,Chambers,Ruth,Benson,Ray,West',',') as Name
+inner join Customer as c on c.LastName = Name.[value]
+--vagy
+
+drop table if EXISTS #names
+select [value] as Name
+into #names
+from string_split('Keil,Gage,Amland,Emanuel,Gates,Koch,Bourne,Colvin,Chambers,Ruth,Benson,Ray,West',',') as Name
+
+select * from #names
+
+select *
+from #names as names
+inner join Customer as c on c.LastName = names.Name
